@@ -1,0 +1,14 @@
+UI elements
+	Play
+	Select different kind of lines to draw
+
+Camera controls
+	Follow rider during play
+	Zoom in/out
+	Pan with mouse/keys
+
+Checkpoints
+Goals
+Restart
+Pause
+Saving/Loading levels?
