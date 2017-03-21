@@ -11,7 +11,12 @@ public class Player : MonoBehaviour {
     {
         if(Input.GetButtonDown("Play"))
         {
-            rb.bodyType = RigidbodyType2D.Dynamic;
+            Play();
         }
+    }
+
+    public void Play()
+    {
+        rb.bodyType = RigidbodyType2D.Dynamic;
     }
 }

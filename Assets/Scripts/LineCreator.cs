@@ -28,4 +28,16 @@ public class LineCreator : MonoBehaviour {
             activeLine.UpdateLine(mousePos);
         }
     }
+
+    public void SetLineType(GameObject newLineType)
+    {
+        // Make sure that the given gameobject can be used to make a line
+        if(newLineType.GetComponent<Line>() == null)
+        {
+            Debug.LogError("LineCreator::SetLineType: " + newLineType.name + " does not have a Line script attached.");
+        } else
+        {
+            linePrefab = newLineType;
+        }
+    }
 }
