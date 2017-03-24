@@ -1,10 +1,8 @@
 Camera controls
-	Follow rider during play
 	Zoom in/out
 	Pan with mouse/keys
 
 Checkpoints
 Goals
-Restart
 Pause
 Saving/Loading levels?

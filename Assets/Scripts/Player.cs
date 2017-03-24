@@ -18,5 +18,6 @@ public class Player : MonoBehaviour {
     public void Play()
     {
         rb.bodyType = RigidbodyType2D.Dynamic;
+        GameManager.gamePlaying = true;
     }
 }

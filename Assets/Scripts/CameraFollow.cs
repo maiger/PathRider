@@ -4,7 +4,12 @@ public class CameraFollow : MonoBehaviour {
 
     [SerializeField]
     [Tooltip("Target to follow")]
-    private Transform target;
+    private Transform targetActive;
+    [SerializeField]
+    [Tooltip("Target to follow")]
+    private Transform targetIdle;
+    private Transform targetCurrent;
+
     [SerializeField]
     private float damping = 1;
     [SerializeField]
@@ -28,21 +33,31 @@ public class CameraFollow : MonoBehaviour {
 
     private void Start()
     {
-        m_LastTargetPosition = target.position;
-        m_OffsetZ = (transform.position - target.position).z;
+        targetCurrent = targetIdle;
+
+        m_LastTargetPosition = targetCurrent.position;
+        m_OffsetZ = (transform.position - targetCurrent.position).z;
         transform.parent = null;
     }
 
     private void Update()
     {
-        if (target == null)
+        if(GameManager.gamePlaying == true)
+        {
+            targetCurrent = targetActive;
+        } else
+        {
+            targetCurrent = targetIdle;
+        }
+
+        if (targetCurrent == null)
         {
             FindPlayer();
             return;
         }
 
         // Only update lookahead pos if accelerating or changed direction
-        float xMoveDelta = (target.position - m_LastTargetPosition).x;
+        float xMoveDelta = (targetCurrent.position - m_LastTargetPosition).x;
 
         bool updateLookAheadTarget = Mathf.Abs(xMoveDelta) > lookAheadMoveThreshold;
 
@@ -57,7 +72,7 @@ public class CameraFollow : MonoBehaviour {
 
         // FIX: Looking ahead not working in Y direction. Also should be based on where ship is pointing, not
         // where ship is traveling.
-        Vector3 aheadTargetPos = target.position + m_LookAheadPos + Vector3.forward * m_OffsetZ;
+        Vector3 aheadTargetPos = targetCurrent.position + m_LookAheadPos + Vector3.forward * m_OffsetZ;
         Vector3 newPos = Vector3.SmoothDamp(transform.position, aheadTargetPos, ref m_CurrentVelocity, damping);
 
         // Clamp camera position between given x and y limits
@@ -67,7 +82,7 @@ public class CameraFollow : MonoBehaviour {
 
         transform.position = newPos;
 
-        m_LastTargetPosition = target.position;
+        m_LastTargetPosition = targetCurrent.position;
     }
 
     void FindPlayer()
@@ -77,7 +92,7 @@ public class CameraFollow : MonoBehaviour {
             GameObject searchResult = GameObject.FindGameObjectWithTag("Player");
             if (searchResult != null)
             {
-                target = searchResult.transform;
+                targetCurrent = searchResult.transform;
             }
             nextTimeToSearch = Time.time + 0.5f;
         }
